@@ -1,3 +1,44 @@
-export default function AddFriendForm() {
-    return <div>AddFriendForm</div>;
+import { useState } from "react";
+import Button from "./Button";
+
+export default function AddFriendForm({ onAddFriend }) {
+    const [name, setName] = useState("");
+    const [image, setImageURL] = useState("https://i.pravatar.cc/48");
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        if (!name || !image) {
+            alert("Please fill in both fields.");
+        }
+        const id = crypto.randomUUID();
+        const newFriend = {
+            id: id,
+            name: name,
+            image: `${image}?=${id}`,
+            balance: 0,
+        };
+        onAddFriend(newFriend);
+        setName("");
+        setImageURL("https://i.pravatar.cc/48");
+    }
+
+    return (
+        <form className="form-add-friend">
+            <label>Friend name</label>
+            <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+            />
+
+            <label>Image URL</label>
+            <input
+                type="text"
+                value={image}
+                onChange={(e) => setImageURL(e.target.value)}
+            />
+
+            <Button onClick={handleSubmit}>Add</Button>
+        </form>
+    );
 }
